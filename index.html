@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f6ef">
+  <title>Team Spin — Wheel Picker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="picker.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Team Spin home"><span class="brand-icon">✳</span> team<span>spin</span><span class="brand-dot">.</span></a>
+    <span class="top-note"><span class="online-dot"></span> A LITTLE WHEEL OF JOY</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="eyebrow"><span>✦</span> LEAVE IT TO THE WHEEL <span>✦</span></div>
+      <h1>Can’t decide? <em>Let’s spin.</em></h1>
+      <p>Choose a team, give the wheel a spin, and see who gets picked next.</p>
+    </section>
+
+    <div class="set-selector" role="group" aria-label="Choose a wheel set">
+      <button class="set-button" type="button" data-set="12OAD" aria-pressed="true">12OAD <span>19 names</span></button>
+      <button class="set-button" type="button" data-set="12OAD German" aria-pressed="false">12OAD German <span>10 names</span></button>
+      <button class="set-button" type="button" data-set="12INOAD" aria-pressed="false">12INOAD <span>9 names</span></button>
+    </div>
+
+    <section class="picker-card" aria-label="Team wheel picker">
+      <div class="wheel-panel">
+        <div class="panel-heading"><span id="set-heading">12OAD LINEUP</span><span class="count-pill" id="remaining-count">19 REMAINING</span></div>
+        <div class="wheel-stage">
+          <div class="wheel-pointer" aria-hidden="true"></div>
+          <div class="wheel-frame">
+            <canvas id="wheel" width="900" height="900" role="img" aria-label="Wheel containing the 12OAD team"></canvas>
+            <div class="wheel-hub" aria-hidden="true"><span>✳</span></div>
+          </div>
+          <span class="sparkle sparkle-one" aria-hidden="true">✦</span>
+          <span class="sparkle sparkle-two" aria-hidden="true">✳</span>
+        </div>
+        <div class="actions">
+          <button class="spin-button" id="spin-button" type="button"><span>✦</span> Spin the wheel <span class="button-arrow">↗</span></button>
+          <button class="spin-button" id="final-pick-button" type="button" hidden><span>✦</span> Final pick <span class="button-arrow">↗</span></button>
+          <div class="final-pick-display" id="final-pick-display" hidden><span>✦ Final pick</span><strong id="final-pick-name"></strong></div>
+          <button class="reset-button" id="reset-button" type="button"><span aria-hidden="true">↻</span> Reset wheel</button>
+        </div>
+        <p class="wheel-hint" id="wheel-hint">Each name can only be picked once per set.</p>
+        <div class="winner-announcement" id="winner-announcement" role="status" aria-live="polite" hidden><span aria-hidden="true">✦ 🎉 ✦</span><strong id="winner-message"></strong><span aria-hidden="true">✦ 🎉 ✦</span></div>
+      </div>
+
+      <aside class="results-panel" aria-labelledby="results-title">
+        <div class="results-top"><span>THE RESULTS</span><span class="tiny-star">✳</span></div>
+        <h2 id="results-title">And the winner is<span>...</span></h2>
+        <p class="results-description">Your picks appear here, with the newest name at the top.</p>
+        <div class="result-list" id="result-list" aria-live="polite" aria-atomic="false">
+          <div class="empty-state" id="empty-state"><div class="empty-icon">✧</div><strong>Nothing picked yet</strong><span>Give the wheel a spin to get started.</span></div>
+        </div>
+        <div class="results-footer"><span>GOOD THINGS AWAIT</span><span>✦</span></div>
+      </aside>
+    </section>
+    <section class="manage-card" aria-labelledby="manage-title">
+      <div class="manage-heading">
+        <div><span class="manage-eyebrow">MAKE IT YOURS</span><h2 id="manage-title">Manage Names</h2><p>Add or remove names from the selected set.</p></div>
+        <button class="manage-toggle" id="manage-toggle" type="button" aria-expanded="false" aria-controls="manage-content">Expand <span aria-hidden="true">⌄</span></button>
+      </div>
+      <div id="manage-content" hidden>
+      <fieldset class="edit-scope">
+        <legend>Apply name changes to</legend>
+        <label><input type="radio" name="edit-scope" value="game" checked> This game only</label>
+        <label><input type="radio" name="edit-scope" value="shared" id="shared-scope" disabled> Save for everyone</label>
+      </fieldset>
+      <p class="connection-status" id="connection-status" role="status">Connecting to the shared database…</p>
+      <form class="add-form" id="add-form">
+        <label for="name-input">Add a name to <strong id="manage-set">12OAD</strong></label>
+        <div class="add-controls"><input id="name-input" name="name" type="text" maxlength="60" placeholder="Enter a name" autocomplete="off" required><button type="submit">Add name <span aria-hidden="true">＋</span></button></div>
+        <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+      </form>
+      <div class="names-heading"><span>SET MEMBERS</span><span id="names-count">19 names</span></div>
+      <div class="names-list" id="names-list" aria-label="Names in the selected set"></div>
+      <p class="manage-note">Game-only changes disappear on reset. Shared changes update the saved list for everyone. Anyone with this link can make shared changes.</p>
+      </div>
+    </section>
+    <p class="bottom-note"><span>✳</span> A LITTLE FUN, ONE SPIN AT A TIME <span>✳</span></p>
+  </main>
+  <footer>MADE FOR THE MOMENTS YOU CAN’T CHOOSE <span>✦</span></footer>
+  <div class="pick-overlay" id="pick-overlay" aria-hidden="true" hidden>
+    <div class="pick-card">
+      <span class="pick-spark pick-spark-left">✦</span><span class="pick-spark pick-spark-right">✳</span>
+      <span class="pick-emblem">✳</span>
+      <span class="pick-eyebrow">THE WHEEL HAS SPOKEN</span>
+      <strong class="pick-name" id="pick-name"></strong>
+      <span class="pick-caption" id="pick-caption">has been picked!</span>
+    </div>
+  </div>
+</body>
+</html>
